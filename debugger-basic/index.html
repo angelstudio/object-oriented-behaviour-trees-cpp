@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Visual Debugger</title>
+		<link rel="stylesheet" href="treeview.css" />
+		<script type="text/javascript" src="treeview.js"></script>
+		<style>
+			html, body {
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			#tree {
+				height: 100%;
+			}
+			#wrapper {
+				position: relative;
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="wrapper">
+			<div style="position: absolute; top: 8px; right: 16px; z-index: 99;">
+				<input type="file" id="input" onchange="handleFiles(this.files);"><br>
+			<!--	<button onclick="if (tree != null) tree.expandAll();">Expand All</button><br>
+				<button onclick="if (tree != null) tree.collapseAll();">Collapse All</button><br>
+				<button onclick="
+for(var index in nodes) { 
+    nodes[index]['name'] = nodes[index]['name'] + '.';
+	tree = new TreeView(cachedData, 'tree');
+}
+">refresh</button>-->
+			</div>
+			<div id="tree"></div>
+		</div>
+		<script>
+function handleFiles(_files) {
+	//works only on the last file selected
+	if (_files.length > 0) {
+		var file = _files[_files.length - 1];
+		var fType = file.name.split('.').pop().toLowerCase();
+		var objUrl = window.URL.createObjectURL(file);
+		domPath = objUrl;
+	}
+}
+			function getTextFile(_domString, _callback) {
+				var rawFile = new XMLHttpRequest();
+				rawFile.open("GET", _domString, true);
+				rawFile.onreadystatechange = function () {
+					if (rawFile.readyState === 4) {
+						if(rawFile.status === 200 || rawFile.status == 0) {
+							var allText = rawFile.responseText;
+							if (allText.length > 0) {
+								if (_callback != null)
+									_callback(allText);
+							}
+						}
+					}
+				}
+				rawFile.send(null);
+			}
+			
+			var nodeStates = ['READY', 'SUCCESS', 'RUNNING', 'FAILED', 'ERROR'];
+			
+			function leadingTabs(_string) {
+				var result = 0;
+				for (var x = 0; x < _string.length;x++) {
+					if (_string[x] == '\t')
+						result++;
+					else
+						break;
+				}
+				return result;
+			}
+			
+			function getTree(_domPath, _callback) {
+				getTextFile(_domPath, function(_text){
+					//Called back after we got the text
+					var data = [];
+					var stack = [];
+					var currentTabs = 0;
+					var last = null;
+					var lines = _text.match(/[^\r\n]+/g);
+					for (var x = 0 ; x < lines.length; x = x + 4) {
+						//find the number of tabs
+						var newTabs = leadingTabs(lines[x]);
+						//Remove all tabs from the lines
+						for (var y = 0; y < 4; y++)
+							lines[x] = lines[x].substring(newTabs);
+						//adjust our level
+						if (currentTabs < newTabs) {
+							//we just went up level(s)
+							for (var y = 0; y < newTabs - currentTabs; y++) {
+								stack.push(last);
+							}
+						} else if (currentTabs > newTabs) {
+							//we just down level(s)
+							for (var y = 0; y < currentTabs - newTabs; y++) {
+								stack.pop();
+							}
+						}
+						if (currentTabs != newTabs)
+							currentTabs = newTabs;
+						//build name string
+						last = {
+							name: '[ '+nodeStates[parseInt(lines[x+3])]+' ] '+lines[x+1]+' ( '+lines[x+2]+' )',
+							children:[]
+						};
+						nodes[lines[x]] = last;
+						if (stack.length == 0) {
+							data.push(last);
+						} else {
+							stack[stack.length-1]['children'].push(last);
+						}
+					}
+					cachedData = data;
+					//callback
+					if (_callback != null)
+						_callback(data);
+				});
+			}
+			
+			var domPath = null;			
+			var tree = null;
+			var nodes = {};
+			var cachedData = null;
+			setInterval(function(){
+				if (domPath != null) {
+					getTree(domPath, function(_data){
+						tree = new TreeView(_data, 'tree');
+					});
+				}
+			}, 60);
+			
+		</script>
+	</body>
+</html>
