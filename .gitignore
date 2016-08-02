@@ -49,11 +49,9 @@ Temporary Items
 # installed lua folder
 /lua/made/*
 
-# compiled lua folders
-/lua/src/lua/
-/lua/src/lua/*
-/lua/src/luac/
-/lua/src/luac/*
+# compiled lua files?
+/lua/src/lua
+/lua/src/luac
 
 # Compiled Object files
 *.slo
