@@ -1,0 +1,73 @@
+The following is just my working doc for unit tests - I was not familiar with any C++ unit testing frameworks when I wrote the original library. I have opted to use the SCENARIO GIVEN WHEN THEN (BDD style).
+
+basictimers
+--------------------------------------------------------------------------------
+I can create a timer and get a timer id back
+	given a set of time values to test, pass and fail split
+		when the timer is set
+			then it succeeded of failed as marked
+I can reset a timer to start a new interval
+	given a range of timers in various states
+		when the timer is ticked then reset
+			then it has its original time
+I can check the timer to see if the associated interval has passed and if yes it is reset
+	given a set of timer values split into do and dont reset, and a wait
+		when the timer is reset
+			then the do reset are reset, the donts are not
+I can delete a timer, freeing memory
+	given a timer
+		when the timer delete is called
+			then the memory is sweet
+I can pause a timer in a system friendly way
+	given timer that is set to a minute
+		when the timer is paused
+			then we still manage to perform some addition operations
+I can get the current time of a timer
+	given a timer that is set to 5 seconds
+		when the timer is checked after several operations
+			then it is >= 0 and < 5
+BTNode
+--------------------------------------------------------------------------------
+Ticking a BTNode behaves as expected
+I can get/set the state of the the node successfully
+I can get/set the priority of the node successfully
+Reseting the state works correctly
+Logging works as expected, including setting debug file.
+BTGroupNode
+--------------------------------------------------------------------------------
+
+BTSequence
+--------------------------------------------------------------------------------
+
+BTSequenceBailout
+--------------------------------------------------------------------------------
+
+BTSequenceSelector
+--------------------------------------------------------------------------------
+
+BTSelector
+--------------------------------------------------------------------------------
+
+BTSelectorConcurrent
+--------------------------------------------------------------------------------
+
+BTSelectorPriority
+--------------------------------------------------------------------------------
+
+BTSelectorRandom
+--------------------------------------------------------------------------------
+
+BTBuffer
+--------------------------------------------------------------------------------
+
+BTLua
+--------------------------------------------------------------------------------
+
+BTRoot
+--------------------------------------------------------------------------------
+
+link
+--------------------------------------------------------------------------------
+
+factory
+--------------------------------------------------------------------------------
