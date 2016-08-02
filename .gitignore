@@ -46,8 +46,14 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-#installed lua folder
+# installed lua folder
 /lua/made/*
+
+# compiled lua folders
+/lua/src/lua/
+/lua/src/lua/*
+/lua/src/luac/
+/lua/src/luac/*
 
 # Compiled Object files
 *.slo
