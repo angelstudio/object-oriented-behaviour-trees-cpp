@@ -1,4 +1,6 @@
-The following is just my working doc for unit tests - I was not familiar with any C++ unit testing frameworks when I wrote the original library. I have opted to use the SCENARIO GIVEN WHEN THEN (BDD style).
+The following is just my working doc for unit tests - I was not familiar with 
+any C++ unit testing frameworks when I wrote the original library.
+I have opted to use the SCENARIO GIVEN WHEN THEN (BDD style).
 
 basictimers
 --------------------------------------------------------------------------------
@@ -10,7 +12,8 @@ I can reset a timer to start a new interval
 	given a range of timers in various states
 		when the timer is ticked then reset
 			then it has its original time
-I can check the timer to see if the associated interval has passed and if yes it is reset
+I can check the timer to see if the associated interval has passed and if yes 
+it is reset
 	given a set of timer values split into do and dont reset, and a wait
 		when the timer is reset
 			then the do reset are reset, the donts are not
@@ -28,11 +31,25 @@ I can get the current time of a timer
 			then it is >= 0 and < 5
 BTNode
 --------------------------------------------------------------------------------
-Ticking a BTNode behaves as expected
-I can get/set the state of the the node successfully
+Ticking a BTNode behaves as expected as does set state
+	given four BTNodes initialized then set to each state
+		when they are ticked
+			then they have the correct next state
 I can get/set the priority of the node successfully
+	given a node
+		when the priority is set to various values
+			then they read the correct new value.
 Reseting the state works correctly
+	given a node in each of states
+		when reset state is called once
+			then it results in ready after one tick
+		when reset state is called 5 times in a row, each tick after the first
+		results in a ready state.
 Logging works as expected, including setting debug file.
+	given two nodes
+		when has a debug file set
+			then the second returns the correct value
+			then the first returns the correct value
 BTGroupNode
 --------------------------------------------------------------------------------
 
